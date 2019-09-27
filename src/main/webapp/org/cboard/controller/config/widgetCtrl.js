@@ -938,6 +938,23 @@ cBoard.controller("widgetCtrl", function(
   };
 
   $scope.saveAsImg = function() {
+    var svg2canvas = function(svgElement, callback) {
+      var svgURL = new XMLSerializer().serializeToString(svgElement),
+        img = new Image();
+
+      img.onload = function() {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        canvas.getContext("2d").drawImage(this, 0, 0);
+        callback(canvas);
+      };
+
+      img.src =
+        "data:image/svg+xml; charset=utf8, " + encodeURIComponent(svgURL);
+
+      return null;
+    };
     var download = function(canvas) {
       let link = document.createElement("a");
       link.setAttribute("download", "chart.png");
@@ -951,11 +968,19 @@ cBoard.controller("widgetCtrl", function(
       link.remove();
     };
     if ($("#preview")) {
-      download(
-        $("#preview")
-          .find("canvas")
-          .get(0)
-      );
+      let canvas = $("#preview")
+        .find("canvas")
+        .get(0);
+      let svg = $("#preview")
+        .find("svg")
+        .get(0);
+      if (canvas) {
+        download(canvas);
+      } else if (svg) {
+        svg2canvas(svg, function(canvas) {
+          download(canvas);
+        });
+      }
     }
   };
 
