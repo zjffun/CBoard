@@ -17,6 +17,8 @@ cBoard.controller("widgetCtrl", function(
 ) {
   var translate = $filter("translate");
   var updateUrl = "dashboard/updateWidget.do";
+  // !!!coding: store all asynchronous request
+  var promises = [];
   $scope.liteMode = false;
   $scope.tab = "preview_widget2";
   //图表类型初始化
@@ -253,9 +255,12 @@ cBoard.controller("widgetCtrl", function(
     { name: translate("CONFIG.WIDGET.YELLOW"), value: "bg-yellow" }
   ];
 
-  $.getJSON("plugins/FineMap/mapdata/citycode.json", function(data) {
-    $scope.provinces = data.provinces;
-  });
+  promises.push( new Promise((res, rej) => {
+    $.getJSON("plugins/FineMap/mapdata/citycode.json", function(data) {
+      $scope.provinces = data.provinces;
+    });
+  }))
+  
 
   $scope.treemap_styles = [
     { name: translate("CONFIG.WIDGET.RANDOM"), value: "random" },
@@ -1119,6 +1124,7 @@ cBoard.controller("widgetCtrl", function(
     }
   };
 
+ 
   // $scope.saveChart = function () {
   //     dashboardService.saveWidget('123', $scope.datasource, $scope.config);
   // };
@@ -2023,4 +2029,9 @@ cBoard.controller("widgetCtrl", function(
 
   /** Ace Editor Starer... **/
   $scope.queryAceOpt = datasetEditorOptions();
+
+  // auto promise (fake wait HTTP request)
+  setTimeout(() =>{
+    $scope.preview();
+  }, 5000)
 });

@@ -51,6 +51,12 @@ angular.module('cBoard').config(['$stateProvider', function ($stateProvider) {
             templateUrl: 'org/cboard/view/config/widget.html',
             controller: 'widgetCtrl'
         })
+        .state('config.widget-iframe', {
+            url: '/widget-iframe?id&datasetId',
+            params: {id: null, datasetId: null},
+            templateUrl: 'org/cboard/view/config/widget-iframe.html',
+            controller: 'widgetCtrl'
+        })
         .state('config.datasource', {
             url: '/datasource/{id}',
             params: {id: null},
