@@ -3,7 +3,8 @@
  */
 // CBoard settings
 var settings = {
-    preferredLanguage: "en" // en/cn: Switch language to Chinese
+    preferredLanguage: "en", // en/cn: Switch language to Chinese
+    iframe_base: "http://localhost:8080/cboard/" // the base url of iframe
 };
 
 var CB_I18N;

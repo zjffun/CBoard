@@ -17,8 +17,6 @@ cBoard.controller("widgetCtrl", function(
 ) {
   var translate = $filter("translate");
   var updateUrl = "dashboard/updateWidget.do";
-  // !!!coding: store all asynchronous request
-  var promises = [];
   $scope.liteMode = false;
   $scope.tab = "preview_widget2";
   //图表类型初始化
@@ -255,12 +253,9 @@ cBoard.controller("widgetCtrl", function(
     { name: translate("CONFIG.WIDGET.YELLOW"), value: "bg-yellow" }
   ];
 
-  promises.push( new Promise((res, rej) => {
-    $.getJSON("plugins/FineMap/mapdata/citycode.json", function(data) {
-      $scope.provinces = data.provinces;
-    });
-  }))
-  
+  $.getJSON("plugins/FineMap/mapdata/citycode.json", function(data) {
+    $scope.provinces = data.provinces;
+  });
 
   $scope.treemap_styles = [
     { name: translate("CONFIG.WIDGET.RANDOM"), value: "random" },
@@ -345,7 +340,6 @@ cBoard.controller("widgetCtrl", function(
   $scope.treeData = [];
   var originalData = [];
   var treeID = "widgetTreeID"; // Set to a same value with treeDom
-
   $scope.datasource;
   $scope.widgetName;
   $scope.widgetCategory;
@@ -989,6 +983,80 @@ cBoard.controller("widgetCtrl", function(
     }
   };
 
+  $scope.copyIframeCode = function() {
+    var widgetId = $scope.widgetId;
+    var src = `${settings.iframe_base}render-iframe.html?non-auth=1&id=${widgetId}`;
+    var iframeCode = `<iframe height="265" style="width: 100%;" scrolling="no" title="" src="${src}" frameborder="no" allowtransparency="true" allowfullscreen="true">${src}</iframe>`;
+    if (copyTextToClipboard(iframeCode)) {
+      ModalUtils.alert("复制成功", "modal-success", "sm");
+    } else {
+      ModalUtils.alert(
+        "复制失败，请手动复制：" + iframeCode,
+        "modal-success",
+        "sm"
+      );
+    }
+  };
+  function copyTextToClipboard(text) {
+    var textArea = document.createElement("textarea");
+
+    //
+    // *** This styling is an extra step which is likely not required. ***
+    //
+    // Why is it here? To ensure:
+    // 1. the element is able to have focus and selection.
+    // 2. if element was to flash render it has minimal visual impact.
+    // 3. less flakyness with selection and copying which **might** occur if
+    //    the textarea element is not visible.
+    //
+    // The likelihood is the element won't even render, not even a
+    // flash, so some of these are just precautions. However in
+    // Internet Explorer the element is visible whilst the popup
+    // box asking the user for permission for the web page to
+    // copy to the clipboard.
+    //
+
+    // Place in top-left corner of screen regardless of scroll position.
+    textArea.style.position = "fixed";
+    textArea.style.top = 0;
+    textArea.style.left = 0;
+
+    // Ensure it has a small width and height. Setting to 1px / 1em
+    // doesn't work as this gives a negative w/h on some browsers.
+    textArea.style.width = "2em";
+    textArea.style.height = "2em";
+
+    // We don't need padding, reducing the size if it does flash render.
+    textArea.style.padding = 0;
+
+    // Clean up any borders.
+    textArea.style.border = "none";
+    textArea.style.outline = "none";
+    textArea.style.boxShadow = "none";
+
+    // Avoid flash of white box if rendered for any reason.
+    textArea.style.background = "transparent";
+
+    textArea.value = text;
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      var successful = document.execCommand("copy");
+      if (successful) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      return false;
+    } finally {
+      document.body.removeChild(textArea);
+    }
+  }
+
   $scope.previewQuery = function() {
     $("#viewQuery_widget").html("");
     $timeout(function() {
@@ -1124,7 +1192,6 @@ cBoard.controller("widgetCtrl", function(
     }
   };
 
- 
   // $scope.saveChart = function () {
   //     dashboardService.saveWidget('123', $scope.datasource, $scope.config);
   // };
@@ -2030,8 +2097,16 @@ cBoard.controller("widgetCtrl", function(
   /** Ace Editor Starer... **/
   $scope.queryAceOpt = datasetEditorOptions();
 
-  // auto promise (fake wait HTTP request)
-  setTimeout(() =>{
-    $scope.preview();
-  }, 5000)
+  // run until preview
+  // var preview = function() {
+  //   try {
+  //     $scope.preview();
+  //   } catch (error) {
+  //     setTimeout(() => {
+  //       preview();
+  //     }, 5000);
+  //   }
+  // };
+
+  // preview();
 });

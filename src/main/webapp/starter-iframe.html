@@ -34,7 +34,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
     -->
     <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css" />
 
-    <script src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+    <!-- proxy xhr.open -->
+    <script>
+      function addSearch(url, k, v) {
+        let s = k + "=" + v;
+        if (~url.indexOf("?")) {
+          return url + "&" + s;
+        } else {
+          return url + "?" + s;
+        }
+      }
+      var _XMLHttpRequest = XMLHttpRequest;
+      XMLHttpRequest = function() {
+        var xhr = new _XMLHttpRequest();
+
+        // augment/wrap/modify here
+        var _open = xhr.open;
+        xhr.open = function() {
+          // custom stuff
+          arguments[1] = addSearch(arguments[1], "non-auth", "1");
+          return _open.apply(this, arguments);
+        };
+
+        return xhr;
+      };
+    </script>
+
+    <!-- <script src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script> -->
     <script src="plugins/echart/echarts-3.6.2.min.js"></script>
     <!-- bmap-->
     <script src="plugins/echart/echarts-bmap.min.js"></script>
