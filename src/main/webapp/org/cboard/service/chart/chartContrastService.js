@@ -5,7 +5,7 @@
 cBoard.service('chartContrastService', function () {
 
     this.render = function (containerDom, option, scope, persist, drill, relations, chartConfig) {
-        var render = new CBoardEChartRender(containerDom, option);
+        var render = new CBoardEChartRender(containerDom, option, undefined, chartConfig.option.colorScheme);
         render.addClick(chartConfig, relations);
         return render.chart(null, persist);
     };
@@ -82,11 +82,11 @@ cBoard.service('chartContrastService', function () {
                             show: false
                         }
                     },
-                    itemStyle:{
-                        normal: {
-                            color : '#C23531'
-                        }
-                    },
+                    // itemStyle:{
+                    //     normal: {
+                    //         color : '#C23531'
+                    //     }
+                    // },
                     data:_.map(aggregate_data[0],function(e){return -e})
                 },
                 {
@@ -99,11 +99,11 @@ cBoard.service('chartContrastService', function () {
                             show: false
                         }
                     },
-                    itemStyle:{
-                        normal: {
-                            color : '#3C8DBC'
-                        }
-                    },
+                    // itemStyle:{
+                    //     normal: {
+                    //         color : '#3C8DBC'
+                    //     }
+                    // },
                     data:aggregate_data[1]
                 }
             ]

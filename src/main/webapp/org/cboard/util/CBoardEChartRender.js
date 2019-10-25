@@ -21,7 +21,12 @@ var echartsBasicOption = {
     }
 };
 
-var CBoardEChartRender = function (jqContainer, options, isDeepSpec) {
+var CBoardEChartRender = function (jqContainer, options, isDeepSpec, colorScheme) {
+    
+    if(colorScheme){
+        this.theme = colorScheme;
+    }
+
     this.container = jqContainer; // jquery object
     this.ecc = echarts.init(jqContainer.get(0), this.theme);
     this.isDeppSpec = isDeepSpec;

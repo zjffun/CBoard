@@ -2,6 +2,8 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs tabs-left"><!-- 'tabs-right' for right tabs -->
         <li class="active"><a href="#grid" data-toggle="tab">Grid</a></li>
+        <li><a href="#colorScheme" data-toggle="tab">Color Scheme</a></li>
+        <!-- <li><a href="#title" data-toggle="tab">Title</a></li> -->
         <li><a href="#legend" data-toggle="tab">Legend</a></li>
         <li><a href="#ctgAxis" data-toggle="tab">Category Axis</a></li>
         <li><a href="#valAxis" data-toggle="tab">Value Axis</a></li>
@@ -14,6 +16,12 @@
         <div class="tab-pane active" id="grid">
             <ng-include src="'org/cboard/view/config/chart/options/common/grid.html'"></ng-include>
         </div>
+        <div class="tab-pane" id="colorScheme">
+            <ng-include src="'org/cboard/view/config/chart/options/common/colorScheme.html'"></ng-include>
+        </div>
+        <!-- <div class="tab-pane" id="title">
+            <ng-include src="'org/cboard/view/config/chart/options/common/title.html'"></ng-include>
+        </div> -->
         <div class="tab-pane" id="legend">
             <ng-include src="'org/cboard/view/config/chart/options/common/legend.html'"></ng-include>
         </div>

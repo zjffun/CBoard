@@ -1,3 +1,10 @@
+.z-color-scheme .z-color-scheme__rect{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 2px;
+}
+
 .modal-dialog h1,
 .modal-dialog h2,
 .modal-dialog h3,

@@ -1,0 +1,20 @@
+<form class="form-horizontal">
+  <div class="row">
+    <fieldset>
+      <div class="z-color-scheme" ng-repeat="(key, scheme) in colorSchemesData">
+        <input
+          type="radio"
+          name="colorScheme"
+          ng-model="curWidget.config.option.colorScheme"
+          ng-value="scheme.name"
+        />
+        <div
+          ng-repeat="(key, color) in scheme.colors"
+          class="z-color-scheme__rect"
+          ng-show="key < 7"
+          ng-style="{background: color}"
+        ></div>
+      </div>
+    </fieldset>
+  </div>
+</form>

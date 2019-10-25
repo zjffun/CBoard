@@ -5,7 +5,7 @@
 cBoard.service('chartLineService', function ($state, $window) {
 
     this.render = function (containerDom, option, scope, persist, drill, relations, chartConfig) {
-        var render = new CBoardEChartRender(containerDom, option);
+        var render = new CBoardEChartRender(containerDom, option, undefined, chartConfig.option.colorScheme);
         render.addClick(chartConfig, relations, $state, $window);
         return render.chart(null, persist);
     };
@@ -119,21 +119,32 @@ cBoard.service('chartLineService', function ($state, $window) {
             axis.scale = true;
         });
 
-        if (tunningOpt) {
-            var labelInterval, labelRotate;
-            tunningOpt.ctgLabelInterval ? labelInterval = tunningOpt.ctgLabelInterval : 'auto';
-            tunningOpt.ctgLabelRotate ? labelRotate = tunningOpt.ctgLabelRotate : 0;
-        }
+        // if (tunningOpt) {
+        //     var labelInterval, labelRotate;
+        //     tunningOpt.ctgLabelInterval ? labelInterval = tunningOpt.ctgLabelInterval : 'auto';
+        //     tunningOpt.ctgLabelRotate ? labelRotate = tunningOpt.ctgLabelRotate : 0;
+        // }
 
         var categoryAxis = {
             type: 'category',
             data: string_keys,
-            axisLabel: {
-                interval: labelInterval,
-                rotate: labelRotate
-            },
+            // axisLabel: {
+            //     interval: labelInterval,
+            //     rotate: labelRotate
+            // },
             boundaryGap: false
         };
+
+        if(tunningOpt) {
+            categoryAxis.axisLabel = {
+                textStyle: {
+                    fontSize: tunningOpt.ctgLabelFontSize,
+                    color: tunningOpt.ctgLabelColor,
+                },
+                interval: tunningOpt.ctgLabelInterval,
+                rotate: tunningOpt.ctgLabelRotate,
+            }
+        }
 
         _.each(valueAxis, function (axis) {
             var _stype = axis.series_type;

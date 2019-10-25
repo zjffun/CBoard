@@ -3,7 +3,7 @@
  */
 cBoard.service('chartWorldMapService', function ($state, $window) {
     this.render = function (containerDom, option, scope, persist, drill, relations, chartConfig) {
-        var render = new CBoardEChartRender(containerDom, option);
+        var render = new CBoardEChartRender(containerDom, option, undefined, chartConfig.option.colorScheme);
         render.addClick(chartConfig, relations, $state, $window);
         return render.chart(null, persist);
     };
